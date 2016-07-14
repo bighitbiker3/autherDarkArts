@@ -1,4 +1,4 @@
-'use strict'; 
+'use strict';
 
 var router = require('express').Router();
 var sessionMiddleware = require('express-session');
@@ -9,11 +9,15 @@ var User = require('../api/users/user.model');
 router.use(function (req, res, next) {
   var bodyString = '';
   req.on('data', function (chunk) {
+    console.log('this is chunk', chunk)
     bodyString += chunk;
   });
   req.on('end', function () {
+    console.log('this is bodystring', bodyString)
     bodyString = bodyString || '{}';
-    req.body = eval('(' + bodyString + ')');
+    // console.log(req)
+    req.body = '(' + bodyString + ')';
+    console.log(req.body)
     next();
   });
 });
@@ -52,7 +56,7 @@ router.use(function passportSessionMiddleware (req, res, next) {
 });
 */
 router.use(function (req, res, next) {
-  console.log('user', req.user);
+  // console.log('user', req.user);
   next();
 });
 

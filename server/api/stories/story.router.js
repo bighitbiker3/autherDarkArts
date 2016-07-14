@@ -65,7 +65,6 @@ router.put('/:id', function (req, res, next) {
 });
 
 router.delete('/:id', function (req, res, next) {
-  console.log(req.requestedUser)
   if(req.user.dataValues.isAdmin){
     req.story.destroy()
     .then(function () {

@@ -17,7 +17,6 @@ router.param('id', function (req, res, next, id) {
 });
 
 router.get('/', function (req, res, next) {
-  console.log('this is requesting user ---------------------', req.user)
   User.findAll({})
   .then(function (users) {
     res.json(users);
@@ -26,7 +25,12 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-  User.create(req.body)
+  var email = req.body.email;
+  var password = req.body.password;
+  User.create({
+    email: email,
+    password: password
+  })
   .then(function (user) {
     res.status(201).json(user);
   })
@@ -42,15 +46,23 @@ router.get('/:id', function (req, res, next) {
 });
 
 router.put('/:id', function (req, res, next) {
-  req.requestedUser.update(req.body)
-  .then(function (user) {
-    res.json(user);
-  })
-  .catch(next);
+  if(req.user && req.user.name === req.requestedUser.name){
+    req.requestedUser.update({
+      name: req.body.name,
+      email: req.body.email,
+      phone: req.body.phone,
+    })
+    .then(function (user) {
+      res.json(user);
+    })
+    .catch(next);
+  } else {
+    res.status(403).end()
+  }
+
 });
 
 router.delete('/:id', function (req, res, next) {
-  console.log('-----------------this is request', req.user.dataValues.isAdmin)
   if(req.user.dataValues.isAdmin){
     req.requestedUser.destroy()
     .then(function () {

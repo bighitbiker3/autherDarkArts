@@ -1,7 +1,11 @@
-'use strict'; 
+'use strict';
 
 var app = require('express')();
 var path = require('path');
+
+// app.use(function(req, res, next){
+//   res.redirect('http://192.168.1.89:8080/')
+// })
 
 app.use(require('./logging.middleware'));
 
