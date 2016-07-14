@@ -17,6 +17,7 @@ router.param('id', function (req, res, next, id) {
 });
 
 router.get('/', function (req, res, next) {
+  console.log('this is requesting user ---------------------', req.user)
   User.findAll({})
   .then(function (users) {
     res.json(users);
@@ -49,11 +50,17 @@ router.put('/:id', function (req, res, next) {
 });
 
 router.delete('/:id', function (req, res, next) {
-  req.requestedUser.destroy()
-  .then(function () {
-    res.status(204).end();
-  })
-  .catch(next);
+  console.log('-----------------this is request', req.user.dataValues.isAdmin)
+  if(req.user.dataValues.isAdmin){
+    req.requestedUser.destroy()
+    .then(function () {
+      res.status(204).end();
+    })
+    .catch(next);
+  } else {
+    res.status(403).end()
+  }
+
 });
 
 module.exports = router;
